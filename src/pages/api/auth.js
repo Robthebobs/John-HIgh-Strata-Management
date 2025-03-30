@@ -18,7 +18,6 @@ export default async function handler(req) {
   try {
     const { userId, password } = await req.json();
     
-    // In a real application, these would be securely stored and compared
     const validUserId = process.env.VALID_USER_ID;
     const validPassword = process.env.VALID_PASSWORD;
 

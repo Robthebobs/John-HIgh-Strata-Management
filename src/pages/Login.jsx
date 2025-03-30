@@ -14,7 +14,6 @@ const Login = () => {
     setIsLoading(true);
     setError('');
 
-    // Simulate a small delay for better UX
     await new Promise(resolve => setTimeout(resolve, 500));
 
     const validUserId = process.env.REACT_APP_VALID_USER_ID;

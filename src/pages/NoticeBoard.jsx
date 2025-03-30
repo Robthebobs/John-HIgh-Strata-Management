@@ -7,21 +7,21 @@ const mockAnnouncements = [
     id: 1,
     title: "System Maintenance",
     content: "Scheduled maintenance this weekend from 2 AM to 4 AM AEST",
-    date: "2024-03-20",
+    date: "2024-04-20",
     priority: "high"
   },
   {
     id: 2,
     title: "New Feature Release",
     content: "Check out our new dashboard features!",
-    date: "2024-03-19",
+    date: "2024-04-19",
     priority: "medium"
   },
   {
     id: 3,
     title: "Office Update",
     content: "Sydney office will be having a team building day next Friday",
-    date: "2024-03-18",
+    date: "2024-04-18",
     priority: "low"
   }
 ];

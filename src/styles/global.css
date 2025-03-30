@@ -203,7 +203,6 @@ body {
   background-color: #FAFFF8;
 }
 
-/* Contact Page Styles */
 .contact-page {
   padding: 2rem 0;
 }
@@ -327,7 +326,6 @@ body {
   }
 }
 
-/* Updated button styles */
 .btn-primary {
   background: #4CAF50;
   color: #FAFFF8;
@@ -353,7 +351,6 @@ body {
   cursor: not-allowed;
 }
 
-/* Login page styles */
 .login-container {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -485,7 +482,6 @@ body {
   }
 }
 
-/* Notice Board Styles */
 .notice-board {
   padding: 2rem;
   max-width: 1200px;
@@ -586,7 +582,6 @@ body {
   padding: 2rem;
 }
 
-/* Maintenance Form Styles */
 .maintenance-section {
   margin-top: 3rem;
   background: white;
@@ -664,7 +659,6 @@ body {
   }
 }
 
-/* 404 Page Styles */
 .not-found {
   min-height: 100vh;
   display: flex;
