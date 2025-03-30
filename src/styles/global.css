@@ -1,1 +1,189 @@
-/* Add the CSS from the previous example here */ 
+.hero-text h1 {
+  font-size: 2.8rem;
+  margin-bottom: 1.5rem;
+  line-height: 1.2;
+}
+
+.hero-text p {
+  color: #6A6A6A;
+}
+
+.highlight {
+  color: #4CAF50;
+  font-size: 5rem;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem;
+    background: #FAFFF8;
+  }
+  
+  .main-nav {
+    display: flex;
+    gap: 2rem;
+  }
+
+  .hero {
+    display: grid;
+    grid-template-columns: 0.8fr 1.2fr;
+    gap: 4rem;
+    margin-bottom: 2rem;
+    align-items: center;
+    min-height: calc(100vh - 200px);
+    max-height: 800px;
+    overflow: hidden;
+  }
+  
+  .hero-text {
+    padding-right: 2rem;
+    z-index: 4;
+  }
+
+  .hero-image {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    height: 100%;
+    min-height: 600px;
+    max-height: 700px;
+    overflow: hidden;
+  }
+
+  .hero-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .main-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+    flex: 1;
+    width: 100%;
+    box-sizing: border-box;
+    background-color: #FAFFF8;
+  }
+  
+  .nav-link {
+    text-decoration: none;
+    color: #333;
+  }
+  
+  .nav-link.active {
+    color: #4CAF50;
+  }
+  
+  .auth-buttons {
+    display: flex;
+    gap: 1rem;
+  }
+  
+  .btn {
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    text-decoration: none;
+  }
+  
+  .btn-login {
+    color: #4CAF50;
+    border: 1px solid #4CAF50;
+  }
+  
+  .btn-signup {
+    background: #4CAF50;
+    color: #FAFFF8;
+  }
+  
+  .highlight {
+    color: #4CAF50;
+  }
+  
+  .footer {
+    background: #333;
+    color: #FAFFF8;
+    padding: 2rem;
+    margin-top: auto;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  
+  .contact-info {
+    margin-bottom: 1rem;
+  }
+
+.image-collage {
+  position: relative;
+  width: 130%;
+  height: 100%;
+  overflow: hidden;
+  border-radius: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.collage-img {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  opacity: 0;
+  transition: opacity 0.5s ease-in-out;
+  left: 0;
+  top: 0;
+  transform: scale(1.01);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  -webkit-transform-style: preserve-3d;
+  will-change: opacity;
+}
+
+.logo img {
+  height: 40px;
+}
+
+.img1 {
+  animation: fadeInOut 9s infinite;
+  z-index: 1;
+}
+
+.img2 {
+  animation: fadeInOut 9s infinite;
+  animation-delay: 3s;
+  z-index: 2;
+}
+
+.img3 {
+  animation: fadeInOut 9s infinite;
+  animation-delay: 6s;
+  z-index: 3;
+}
+
+@keyframes fadeInOut {
+  0%, 100% { opacity: 0; }
+  3%, 33% { opacity: 1; }
+  36%, 97% { opacity: 0; }
+}
+
+.collage-img:hover {
+  transform: scale(1.01);
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.app {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
