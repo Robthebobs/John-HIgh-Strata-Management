@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-// Mock data for local development
+// Mock data for both development and production
 const mockAnnouncements = [
   {
     id: 1,
@@ -29,7 +29,6 @@ const mockAnnouncements = [
 const NoticeBoard = () => {
   const [announcements, setAnnouncements] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState(null);
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     name: '',
@@ -43,34 +42,17 @@ const NoticeBoard = () => {
   });
 
   useEffect(() => {
-    fetchAnnouncements();
+    loadAnnouncements();
   }, []);
 
-  const fetchAnnouncements = async () => {
+  const loadAnnouncements = async () => {
     try {
       setIsLoading(true);
-      setError(null);
-
-      if (process.env.NODE_ENV === 'development') {
-        await new Promise(resolve => setTimeout(resolve, 500));
-        setAnnouncements(mockAnnouncements);
-      } else {
-        const apiUrl = process.env.REACT_APP_API_URL;
-        if (!apiUrl) {
-          throw new Error('API URL not configured');
-        }
-        
-        const response = await fetch(`${apiUrl}/api/announcements`);
-        if (!response.ok) {
-          throw new Error('Failed to fetch announcements');
-        }
-        
-        const data = await response.json();
-        setAnnouncements(data);
-      }
+      // Simulate API delay
+      await new Promise(resolve => setTimeout(resolve, 500));
+      setAnnouncements(mockAnnouncements);
     } catch (err) {
-      setError('Failed to load announcements. Please try again later.');
-      console.error('Error fetching announcements:', err);
+      console.error('Error:', err);
     } finally {
       setIsLoading(false);
     }
@@ -124,19 +106,6 @@ const NoticeBoard = () => {
     return (
       <div className="notice-board loading">
         <div className="loading-spinner">Loading announcements...</div>
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="notice-board error">
-        <div className="error-message">
-          {error}
-          <button onClick={fetchAnnouncements} className="btn btn-primary retry-btn">
-            Retry
-          </button>
-        </div>
       </div>
     );
   }
