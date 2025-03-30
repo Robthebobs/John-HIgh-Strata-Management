@@ -6,6 +6,7 @@ import Home from './pages/Home';
 import Contact from './pages/Contact';
 import Login from './pages/Login';
 import NoticeBoard from './pages/NoticeBoard';
+import NotFound from './pages/NotFound';
 import './styles/global.css';
 
 const ProtectedRoute = ({ children }) => {
@@ -30,7 +31,7 @@ function App() {
               </ProtectedRoute>
             } 
           />
-          <Route path="*" element={<Navigate to="/" />} />
+          <Route path="*" element={<NotFound />} />
         </Routes>
         <Footer />
       </div>

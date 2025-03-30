@@ -193,16 +193,15 @@ body {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  background-color: #FAFFF8;
 }
 
 .app {
   flex: 1;
   display: flex;
   flex-direction: column;
-  background-color: #FAFFF8;
 }
 
+/* Contact Page Styles */
 .contact-page {
   padding: 2rem 0;
 }
@@ -326,6 +325,7 @@ body {
   }
 }
 
+/* Updated button styles */
 .btn-primary {
   background: #4CAF50;
   color: #FAFFF8;
@@ -351,6 +351,7 @@ body {
   cursor: not-allowed;
 }
 
+/* Login page styles */
 .login-container {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -482,6 +483,7 @@ body {
   }
 }
 
+/* Notice Board Styles */
 .notice-board {
   padding: 2rem;
   max-width: 1200px;
@@ -582,6 +584,7 @@ body {
   padding: 2rem;
 }
 
+/* Maintenance Form Styles */
 .maintenance-section {
   margin-top: 3rem;
   background: white;
@@ -659,6 +662,7 @@ body {
   }
 }
 
+/* 404 Page Styles */
 .not-found {
   min-height: 100vh;
   display: flex;
@@ -691,21 +695,21 @@ body {
 
 .error-page {
   display: flex;
-  flex-direction: column;
-  align-items: center;
   justify-content: center;
+  align-items: center;
   min-height: 100vh;
   padding: 2rem;
-  background-color: #f8f9fa;
-  text-align: center;
+  background-color: #FAFFF8;
 }
 
 .error-content {
-  max-width: 600px;
-  padding: 2rem;
+  text-align: center;
   background: white;
+  padding: 3rem;
   border-radius: 12px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  max-width: 500px;
+  width: 100%;
 }
 
 .error-logo {
@@ -715,14 +719,13 @@ body {
 
 .error-message {
   margin: 2rem 0;
-  color: #6c757d;
 }
 
 .error-message .large-text {
-  font-size: 2rem;
+  font-size: 1.5rem;
   font-weight: bold;
+  color: #333;
   margin-bottom: 1rem;
-  color: #343a40;
 }
 
 .error-actions {
