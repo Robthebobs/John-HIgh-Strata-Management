@@ -8,7 +8,6 @@ import Login from './pages/Login';
 import NoticeBoard from './pages/NoticeBoard';
 import NotFound from './pages/NotFound';
 import AdminContact from './pages/AdminContact';
-import Greeting from './components/Greeting';
 import './styles/global.css';
 
 const ProtectedRoute = ({ children }) => {
@@ -20,7 +19,6 @@ function App() {
   return (
     <Router>
       <div className="app">
-        <Greeting />
         <Header />
         <Routes>
           <Route path="/" element={<Home />} />
