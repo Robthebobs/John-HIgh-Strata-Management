@@ -1,7 +1,17 @@
-import { Link } from 'react-router-dom';
+import { Link, NavLink, useNavigate } from 'react-router-dom';
 import logo from '../assets/logo.svg';
 
 const Header = () => {
+  const navigate = useNavigate();
+  const isAuthenticated = localStorage.getItem('isAuthenticated') === 'true';
+
+  const handleNoticeBoard = (e) => {
+    if (!isAuthenticated) {
+      e.preventDefault();
+      navigate('/login');
+    }
+  };
+
   return (
     <header className="header">
       <div className="logo">
@@ -11,13 +21,23 @@ const Header = () => {
       </div>
       
       <nav className="main-nav">
-        <Link to="/" className="nav-link active">Home</Link>
-        <Link to="/contact" className="nav-link">Contact</Link>
+        <NavLink to="/" className={({ isActive }) => isActive ? "nav-link active" : "nav-link"}>
+          Home
+        </NavLink>
+        <NavLink to="/contact" className={({ isActive }) => isActive ? "nav-link active" : "nav-link"}>
+          Contact
+        </NavLink>
+        <NavLink 
+          to="/notice-board" 
+          className={({ isActive }) => isActive ? "nav-link active" : "nav-link"}
+          onClick={handleNoticeBoard}
+        >
+          Requests/Announcements
+        </NavLink>
       </nav>
       
       <div className="auth-buttons">
-        <Link to="/login" className="btn btn-login">Login</Link>
-        <Link to="/signup" className="btn btn-signup">Sign Up</Link>
+        <Link to="/login" className="btn btn-primary">Login</Link>
       </div>
     </header>
   );
