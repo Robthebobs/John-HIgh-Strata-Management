@@ -1,38 +1,25 @@
 import { NextResponse } from 'next/server';
 
 export const config = {
-  matcher: '/api/:path*',
+  matcher: '/api/greeting',
 };
 
-export default function middleware(request) {
-  if (request.nextUrl.pathname === '/api/404') {
-    return new NextResponse(
-      JSON.stringify({
-        status: 404,
-        message: 'Page not found!!!',
-      }),
-      {
-        status: 404,
-        headers: {
-          'content-type': 'application/json',
-        },
-      }
-    );
-  }
+export default async function middleware(request) {
+  try {
+    // Get country from Vercel's geolocation headers
+    const country = request.geo?.country || 'UNKNOWN';
+    
+    // Create response with greeting based on location
+    const response = NextResponse.json({
+      greeting: country === 'AU' ? "G'day" : "Hello there",
+      country: country
+    });
 
-  if (request.nextUrl.pathname === '/api/auth') {
-    if (request.method !== 'POST') {
-      return new NextResponse(
-        JSON.stringify({ error: 'Method not allowed' }),
-        {
-          status: 405,
-          headers: {
-            'content-type': 'application/json',
-          },
-        }
-      );
-    }
+    return response;
+  } catch (error) {
+    return NextResponse.json({
+      greeting: "Hello there",
+      country: null
+    });
   }
-  
-  return NextResponse.next();
 } 

@@ -8,6 +8,8 @@ const Greeting = () => {
     const fetchGreeting = async () => {
       try {
         const response = await fetch('/api/greeting');
+        if (!response.ok) throw new Error('Failed to fetch greeting');
+        
         const data = await response.json();
         setGreeting(data.greeting);
         setVisible(true);
@@ -18,6 +20,12 @@ const Greeting = () => {
         }, 3000);
       } catch (error) {
         console.error('Failed to fetch greeting:', error);
+        // Show default greeting on error
+        setGreeting('Hello there');
+        setVisible(true);
+        setTimeout(() => {
+          setVisible(false);
+        }, 3000);
       }
     };
 
