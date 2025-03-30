@@ -6,8 +6,6 @@ import Home from './pages/Home';
 import Contact from './pages/Contact';
 import Login from './pages/Login';
 import NoticeBoard from './pages/NoticeBoard';
-import NotFound from './pages/NotFound';
-import AdminContact from './pages/AdminContact';
 import './styles/global.css';
 
 const ProtectedRoute = ({ children }) => {
@@ -32,8 +30,7 @@ function App() {
               </ProtectedRoute>
             } 
           />
-          <Route path="/admin-contact" element={<AdminContact />} />
-          <Route path="*" element={<NotFound />} />
+          <Route path="*" element={<Navigate to="/" />} />
         </Routes>
         <Footer />
       </div>

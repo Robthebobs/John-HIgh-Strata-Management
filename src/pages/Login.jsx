@@ -29,9 +29,20 @@ const Login = () => {
     setIsLoading(false);
   };
 
-  const handleContactAdmin = (e) => {
+  const handleContactAdmin = async (e) => {
     e.preventDefault();
-    navigate('/admin-contact');
+    try {
+      const response = await fetch('/api/404', {
+        method: 'GET',
+      });
+      
+      if (response.status === 404) {
+        navigate('/admin-contact');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      navigate('/admin-contact');
+    }
   };
 
   return (

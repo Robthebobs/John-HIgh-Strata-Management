@@ -1,6 +1,36 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+
+// Mock data for local development
+const mockAnnouncements = [
+  {
+    id: 1,
+    title: "System Maintenance",
+    content: "Scheduled maintenance this weekend from 2 AM to 4 AM AEST",
+    date: "2024-03-20",
+    priority: "high"
+  },
+  {
+    id: 2,
+    title: "New Feature Release",
+    content: "Check out our new dashboard features!",
+    date: "2024-03-19",
+    priority: "medium"
+  },
+  {
+    id: 3,
+    title: "Office Update",
+    content: "Sydney office will be having a team building day next Friday",
+    date: "2024-03-18",
+    priority: "low"
+  }
+];
 
 const NoticeBoard = () => {
+  const [announcements, setAnnouncements] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     name: '',
     unit: '',
@@ -11,6 +41,45 @@ const NoticeBoard = () => {
     preferredDate: '',
     preferredTime: 'morning'
   });
+
+  useEffect(() => {
+    fetchAnnouncements();
+  }, []);
+
+  const fetchAnnouncements = async () => {
+    try {
+      setIsLoading(true);
+      setError(null);
+
+      if (process.env.NODE_ENV === 'development') {
+        await new Promise(resolve => setTimeout(resolve, 500));
+        setAnnouncements(mockAnnouncements);
+      } else {
+        const apiUrl = process.env.REACT_APP_API_URL;
+        if (!apiUrl) {
+          throw new Error('API URL not configured');
+        }
+        
+        const response = await fetch(`${apiUrl}/api/announcements`);
+        if (!response.ok) {
+          throw new Error('Failed to fetch announcements');
+        }
+        
+        const data = await response.json();
+        setAnnouncements(data);
+      }
+    } catch (err) {
+      setError('Failed to load announcements. Please try again later.');
+      console.error('Error fetching announcements:', err);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem('isAuthenticated');
+    navigate('/login');
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -38,129 +107,188 @@ const NoticeBoard = () => {
     });
   };
 
-  return (
-    <div className="main-content">
-      <div className="notice-board">
-        <h1 className="page-title">Requests/Announcements</h1>
-        <div className="notices">
-          {/* Add your notices here */}
-          <p>Coming soon... Notice board content will be added here.</p>
+  const getPriorityColor = (priority) => {
+    switch (priority) {
+      case 'high':
+        return 'red';
+      case 'medium':
+        return 'orange';
+      case 'low':
+        return 'green';
+      default:
+        return 'gray';
+    }
+  };
+
+  if (isLoading) {
+    return (
+      <div className="notice-board loading">
+        <div className="loading-spinner">Loading announcements...</div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="notice-board error">
+        <div className="error-message">
+          {error}
+          <button onClick={fetchAnnouncements} className="btn btn-primary retry-btn">
+            Retry
+          </button>
         </div>
+      </div>
+    );
+  }
 
-        <div className="maintenance-section">
-          <h2 className="section-title">Maintenance Request</h2>
-          <form className="maintenance-form" onSubmit={handleSubmit}>
-            <div className="form-row">
-              <div className="form-group">
-                <label htmlFor="name">Full Name</label>
-                <input
-                  type="text"
-                  id="name"
-                  name="name"
-                  value={formData.name}
-                  onChange={handleChange}
-                  required
-                />
-              </div>
-              <div className="form-group">
-                <label htmlFor="unit">Unit Number</label>
-                <input
-                  type="text"
-                  id="unit"
-                  name="unit"
-                  value={formData.unit}
-                  onChange={handleChange}
-                  required
-                />
-              </div>
-            </div>
+  return (
+    <div className="notice-board">
+      <div className="notice-header">
+        <h1>Notice Board</h1>
+        <button onClick={handleLogout} className="btn btn-secondary logout-btn">
+          Logout
+        </button>
+      </div>
 
-            <div className="form-row">
-              <div className="form-group">
-                <label htmlFor="phone">Phone Number</label>
-                <input
-                  type="tel"
-                  id="phone"
-                  name="phone"
-                  value={formData.phone}
-                  onChange={handleChange}
-                  required
-                />
+      <div className="announcements-section">
+        <h2>Announcements</h2>
+        <div className="announcements">
+          {announcements.length === 0 ? (
+            <p className="no-announcements">No announcements to display.</p>
+          ) : (
+            announcements.map(announcement => (
+              <div 
+                key={announcement.id} 
+                className="announcement-card"
+                style={{ borderLeft: `4px solid ${getPriorityColor(announcement.priority)}` }}
+              >
+                <div className="announcement-header">
+                  <h2>{announcement.title}</h2>
+                  <span className="date">{announcement.date}</span>
+                </div>
+                <p className="content">{announcement.content}</p>
+                <div className="priority-tag" style={{ color: getPriorityColor(announcement.priority) }}>
+                  {announcement.priority.toUpperCase()}
+                </div>
               </div>
-              <div className="form-group">
-                <label htmlFor="email">Email</label>
-                <input
-                  type="email"
-                  id="email"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  required
-                />
-              </div>
-            </div>
+            ))
+          )}
+        </div>
+      </div>
 
-            <div className="form-row">
-              <div className="form-group">
-                <label htmlFor="requestType">Request Type</label>
-                <select
-                  id="requestType"
-                  name="requestType"
-                  value={formData.requestType}
-                  onChange={handleChange}
-                  required
-                >
-                  <option value="repair">Repair</option>
-                  <option value="replacement">Replacement</option>
-                  <option value="inspection">Inspection</option>
-                  <option value="other">Other</option>
-                </select>
-              </div>
-              <div className="form-group">
-                <label htmlFor="preferredDate">Preferred Date</label>
-                <input
-                  type="date"
-                  id="preferredDate"
-                  name="preferredDate"
-                  value={formData.preferredDate}
-                  onChange={handleChange}
-                  required
-                />
-              </div>
-            </div>
-
+      <div className="maintenance-section">
+        <h2>Maintenance Request</h2>
+        <form className="maintenance-form" onSubmit={handleSubmit}>
+          <div className="form-row">
             <div className="form-group">
-              <label htmlFor="preferredTime">Preferred Time</label>
+              <label htmlFor="name">Full Name</label>
+              <input
+                type="text"
+                id="name"
+                name="name"
+                value={formData.name}
+                onChange={handleChange}
+                required
+              />
+            </div>
+            <div className="form-group">
+              <label htmlFor="unit">Unit Number</label>
+              <input
+                type="text"
+                id="unit"
+                name="unit"
+                value={formData.unit}
+                onChange={handleChange}
+                required
+              />
+            </div>
+          </div>
+
+          <div className="form-row">
+            <div className="form-group">
+              <label htmlFor="phone">Phone Number</label>
+              <input
+                type="tel"
+                id="phone"
+                name="phone"
+                value={formData.phone}
+                onChange={handleChange}
+                required
+              />
+            </div>
+            <div className="form-group">
+              <label htmlFor="email">Email</label>
+              <input
+                type="email"
+                id="email"
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
+                required
+              />
+            </div>
+          </div>
+
+          <div className="form-row">
+            <div className="form-group">
+              <label htmlFor="requestType">Request Type</label>
               <select
-                id="preferredTime"
-                name="preferredTime"
-                value={formData.preferredTime}
+                id="requestType"
+                name="requestType"
+                value={formData.requestType}
                 onChange={handleChange}
                 required
               >
-                <option value="morning">Morning (9AM - 12PM)</option>
-                <option value="afternoon">Afternoon (12PM - 5PM)</option>
-                <option value="evening">Evening (5PM - 8PM)</option>
+                <option value="repair">Repair</option>
+                <option value="replacement">Replacement</option>
+                <option value="inspection">Inspection</option>
+                <option value="other">Other</option>
               </select>
             </div>
-
             <div className="form-group">
-              <label htmlFor="description">Description of Issue</label>
-              <textarea
-                id="description"
-                name="description"
-                value={formData.description}
+              <label htmlFor="preferredDate">Preferred Date</label>
+              <input
+                type="date"
+                id="preferredDate"
+                name="preferredDate"
+                value={formData.preferredDate}
                 onChange={handleChange}
-                rows="4"
                 required
-              ></textarea>
+              />
             </div>
+          </div>
 
-            <button type="submit" className="btn btn-primary submit-btn">
-              Submit Request
-            </button>
-          </form>
-        </div>
+          <div className="form-group">
+            <label htmlFor="preferredTime">Preferred Time</label>
+            <select
+              id="preferredTime"
+              name="preferredTime"
+              value={formData.preferredTime}
+              onChange={handleChange}
+              required
+            >
+              <option value="morning">Morning (9AM - 12PM)</option>
+              <option value="afternoon">Afternoon (12PM - 5PM)</option>
+              <option value="evening">Evening (5PM - 8PM)</option>
+            </select>
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="description">Description of Issue</label>
+            <textarea
+              id="description"
+              name="description"
+              value={formData.description}
+              onChange={handleChange}
+              rows="4"
+              required
+            ></textarea>
+          </div>
+
+          <button type="submit" className="btn btn-primary submit-btn">
+            Submit Request
+          </button>
+        </form>
       </div>
     </div>
   );
