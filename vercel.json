@@ -1,26 +1,7 @@
 {
   "version": 2,
-  "framework": "create-react-app",
   "routes": [
-    {
-      "src": "^/static/(.*)",
-      "dest": "/static/$1"
-    },
-    {
-      "src": "^/favicon.ico",
-      "dest": "/favicon.ico"
-    },
-    {
-      "src": "^/manifest.json",
-      "dest": "/manifest.json"
-    },
-    {
-      "src": "^/(.*).(js|json|css|ico|jpg|jpeg|png|gif|svg)$",
-      "dest": "/$1.$2"
-    },
-    {
-      "src": "^/(.*)",
-      "dest": "/index.html"
-    }
+    { "handle": "filesystem" },
+    { "src": "/.*", "dest": "/index.html" }
   ]
 } 
