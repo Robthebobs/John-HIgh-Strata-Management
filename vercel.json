@@ -1,28 +1,25 @@
 {
   "version": 2,
-  "buildCommand": "CI=false pnpm run build",
-  "installCommand": "pnpm install --no-frozen-lockfile",
-  "outputDirectory": "build",
   "framework": "create-react-app",
   "routes": [
     {
-      "src": "/static/(.*)",
+      "src": "^/static/(.*)",
       "dest": "/static/$1"
     },
     {
-      "src": "/favicon.ico",
+      "src": "^/favicon.ico",
       "dest": "/favicon.ico"
     },
     {
-      "src": "/manifest.json",
+      "src": "^/manifest.json",
       "dest": "/manifest.json"
     },
     {
-      "src": "/logo(.*)",
-      "dest": "/logo$1"
+      "src": "^/(.*).(js|json|css|ico|jpg|jpeg|png|gif|svg)$",
+      "dest": "/$1.$2"
     },
     {
-      "src": "/(.*)",
+      "src": "^/(.*)",
       "dest": "/index.html"
     }
   ]
