@@ -193,12 +193,20 @@ body {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: #FAFFF8;
 }
 
 .app {
   flex: 1;
   display: flex;
   flex-direction: column;
+  min-height: 100vh;
+  background-color: #FAFFF8;
 }
 
 /* Contact Page Styles */
@@ -484,12 +492,19 @@ body {
 }
 
 /* Notice Board Styles */
-.notice-board {
+.notice-board-container {
+  min-height: 100vh;
   padding: 2rem;
+  background-color: #FAFFF8;
+}
+
+.notice-board-content {
   max-width: 1200px;
   margin: 0 auto;
-  background-color: #FAFFF8;
-  min-height: 100vh;
+  padding: 2rem;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .notice-header {

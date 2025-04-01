@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import logo from '../assets/logo.svg';
 
 const Login = () => {
@@ -81,7 +81,7 @@ const Login = () => {
           </div>
           
           <div className="form-links">
-            <a href="#" className="forgot-password">Forgot Password</a>
+            <Link to="/404" className="forgot-password">Forgot Password</Link>
           </div>
           
           {error && <div className="error-message">{error}</div>}
@@ -95,7 +95,7 @@ const Login = () => {
           </button>
           
           <div className="login-footer">
-            <p>Do not have your login details? <a href="#" onClick={handleContactAdmin} className="help-link">Contact admin</a></p>
+            <p>Do not have your login details? <Link to="/404" className="help-link">Contact admin</Link></p>
           </div>
         </form>
       </div>
