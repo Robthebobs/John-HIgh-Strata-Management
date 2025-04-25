@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Header from './components/Header';
 import Footer from './components/Footer';
@@ -8,6 +8,7 @@ import Login from './pages/Login';
 import Signup from './pages/Signup';
 import NoticeBoard from './pages/NoticeBoard';
 import DocumentUpload from './pages/DocumentUpload';
+import DebugPage from './pages/DebugPage';
 import NotFound from './pages/NotFound';
 import './styles/global.css';
 
@@ -17,6 +18,31 @@ const ProtectedRoute = ({ children }) => {
 };
 
 function App() {
+  const [appError, setAppError] = useState(null);
+
+  useEffect(() => {
+    // Log basic app initialization info
+    console.log('App initialized, React version:', React.version);
+    console.log('Environment:', process.env.NODE_ENV);
+    
+    // Check if we're in the Vercel production environment
+    if (window.location.hostname.includes('vercel.app')) {
+      console.log('Running on Vercel deployment');
+    }
+  }, []);
+
+  // If there's a catastrophic error, show it instead of a blank screen
+  if (appError) {
+    return (
+      <div style={{ padding: '20px', maxWidth: '800px', margin: '0 auto' }}>
+        <h1>App Error</h1>
+        <pre style={{ background: '#ffeeee', padding: '15px', borderRadius: '4px' }}>
+          {appError.toString()}
+        </pre>
+      </div>
+    );
+  }
+
   return (
     <Router>
       <div className="app">
@@ -42,6 +68,8 @@ function App() {
               </ProtectedRoute>
             } 
           />
+          {/* Debug route to help diagnose Vercel issues */}
+          <Route path="/debug" element={<DebugPage />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
         <Footer />
