@@ -1,6 +1,12 @@
 {
   "functions": {
-    "api/php/**/*.php": {
+    "api/php/index.php": {
+      "runtime": "vercel-php@0.6.0"
+    },
+    "api/php/supabase-auth.php": {
+      "runtime": "vercel-php@0.6.0"
+    },
+    "api/php/upload.php": {
       "runtime": "vercel-php@0.6.0"
     }
   },
