@@ -65,8 +65,14 @@ const DocumentUpload = () => {
 
   const uploadFile = async (file, index) => {
     try {
-      // Get user ID from localStorage or use 'anonymous'
-      const userId = localStorage.getItem('userId') || 'anonymous';
+      // Get user ID from localStorage
+      let userId = localStorage.getItem('userId');
+      
+      // If no user ID or the value isn't a UUID, use a default UUID for anonymous users
+      if (!userId || !/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(userId)) {
+        // This is a fixed UUID specifically for anonymous users
+        userId = '00000000-0000-0000-0000-000000000000';
+      }
       
       // Create a unique file path in the bucket
       const filePath = `${userId}/${Date.now()}-${file.name}`;

@@ -82,8 +82,14 @@ const NoticeBoard = () => {
     setSubmitSuccess(false);
 
     try {
-      // Get the current user ID from localStorage or use 'anonymous' if not available
-      const userId = localStorage.getItem('userId') || 'anonymous';
+      // Get the current user ID from localStorage
+      let userId = localStorage.getItem('userId');
+      
+      // If no user ID or the value isn't a UUID, use a default UUID for anonymous users
+      if (!userId || !/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(userId)) {
+        // This is a fixed UUID specifically for anonymous users
+        userId = '00000000-0000-0000-0000-000000000000';
+      }
       
       // Add submission timestamp and user ID
       const maintenanceRequest = {
