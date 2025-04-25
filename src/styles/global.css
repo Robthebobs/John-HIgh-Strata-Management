@@ -680,6 +680,27 @@ body {
   }
 }
 
+.maintenance-section .success-message,
+.maintenance-section .error-message {
+  padding: 1rem;
+  margin-bottom: 1rem;
+  border-radius: 4px;
+  font-weight: 500;
+  text-align: center;
+}
+
+.maintenance-section .success-message {
+  background-color: #d4edda;
+  color: #155724;
+  border: 1px solid #c3e6cb;
+}
+
+.maintenance-section .error-message {
+  background-color: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+}
+
 /* 404 Page Styles */
 .not-found {
   min-height: 100vh;
@@ -876,4 +897,174 @@ body {
   padding: 0.75rem 2rem;
   font-size: 1rem;
   margin-top: 1rem;
+}
+
+/* Document Upload Styles */
+.upload-section {
+  background: white;
+  border-radius: 8px;
+  padding: 2rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.upload-section h2 {
+  margin-bottom: 1.5rem;
+  color: #333;
+  font-size: 1.5rem;
+}
+
+.upload-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.drop-area {
+  border: 2px dashed #4CAF50;
+  border-radius: 8px;
+  padding: 2rem;
+  text-align: center;
+  background-color: #f8f8f8;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.drop-area:hover {
+  background-color: #f0f9f0;
+}
+
+.drop-area.drag-over {
+  background-color: #e8f5e9;
+  border-color: #45a049;
+}
+
+.drop-icon {
+  margin-bottom: 1rem;
+}
+
+.browse-text {
+  color: #4CAF50;
+  font-weight: 500;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.file-input {
+  opacity: 0;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+}
+
+.file-list {
+  background-color: #f8f8f8;
+  border-radius: 8px;
+  padding: 1.5rem;
+}
+
+.file-list h3 {
+  margin-top: 0;
+  margin-bottom: 1rem;
+  font-size: 1.2rem;
+  color: #333;
+}
+
+.file-list ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.file-item {
+  padding: 1rem;
+  border-bottom: 1px solid #eee;
+}
+
+.file-item:last-child {
+  border-bottom: none;
+}
+
+.file-info {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+}
+
+.file-name {
+  font-weight: 500;
+  color: #333;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 70%;
+}
+
+.file-size {
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.progress-container {
+  height: 10px;
+  background-color: #e9ecef;
+  border-radius: 8px;
+  overflow: hidden;
+  position: relative;
+  margin-top: 0.5rem;
+}
+
+.progress-bar {
+  height: 100%;
+  background-color: #4CAF50;
+  border-radius: 8px;
+  transition: width 0.3s ease;
+}
+
+.progress-text {
+  position: absolute;
+  right: 10px;
+  top: -20px;
+  font-size: 0.8rem;
+  color: #666;
+}
+
+.upload-section .success-message,
+.upload-section .error-message {
+  padding: 1rem;
+  margin-bottom: 1rem;
+  border-radius: 4px;
+  font-weight: 500;
+  text-align: center;
+}
+
+.upload-section .success-message {
+  background-color: #d4edda;
+  color: #155724;
+  border: 1px solid #c3e6cb;
+}
+
+.upload-section .error-message {
+  background-color: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+}
+
+@media (max-width: 768px) {
+  .file-info {
+    flex-direction: column;
+  }
+  
+  .file-name {
+    max-width: 100%;
+    margin-bottom: 0.25rem;
+  }
+  
+  .drop-area {
+    padding: 1.5rem 1rem;
+  }
 }

@@ -1,14 +1,5 @@
 {
-  "functions": {
-    "php/*.php": {
-      "runtime": "vercel-php@0.6.0"
-    }
-  },
   "routes": [
-    { "src": "/login", "dest": "/public/login.php" },
-    { "src": "/document-upload", "dest": "/public/document-upload.php" },
-    { "src": "/api/auth", "dest": "/php/auth.php" },
-    { "src": "/api/upload", "dest": "/php/upload.php" },
     { "handle": "filesystem" },
     { "src": "/.*", "dest": "/index.html" }
   ],

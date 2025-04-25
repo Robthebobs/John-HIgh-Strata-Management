@@ -7,6 +7,7 @@ import Contact from './pages/Contact';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
 import NoticeBoard from './pages/NoticeBoard';
+import DocumentUpload from './pages/DocumentUpload';
 import NotFound from './pages/NotFound';
 import './styles/global.css';
 
@@ -30,6 +31,14 @@ function App() {
             element={
               <ProtectedRoute>
                 <NoticeBoard />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/documents" 
+            element={
+              <ProtectedRoute>
+                <DocumentUpload />
               </ProtectedRoute>
             } 
           />

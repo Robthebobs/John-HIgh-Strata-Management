@@ -5,7 +5,7 @@ const Header = () => {
   const navigate = useNavigate();
   const isAuthenticated = localStorage.getItem('isAuthenticated') === 'true';
 
-  const handleNoticeBoard = (e) => {
+  const handleProtectedRoute = (e) => {
     if (!isAuthenticated) {
       e.preventDefault();
       navigate('/login');
@@ -30,9 +30,16 @@ const Header = () => {
         <NavLink 
           to="/notice-board" 
           className={({ isActive }) => isActive ? "nav-link active" : "nav-link"}
-          onClick={handleNoticeBoard}
+          onClick={handleProtectedRoute}
         >
           Requests/Announcements
+        </NavLink>
+        <NavLink 
+          to="/documents" 
+          className={({ isActive }) => isActive ? "nav-link active" : "nav-link"}
+          onClick={handleProtectedRoute}
+        >
+          Documents
         </NavLink>
       </nav>
       

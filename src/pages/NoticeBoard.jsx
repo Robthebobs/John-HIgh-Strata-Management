@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { supabase } from '../supabaseClient';
 
 // Mock data for both development and production
 const mockAnnouncements = [
@@ -29,6 +30,9 @@ const mockAnnouncements = [
 const NoticeBoard = () => {
   const [announcements, setAnnouncements] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState('');
+  const [submitSuccess, setSubmitSuccess] = useState(false);
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     name: '',
@@ -71,22 +75,54 @@ const NoticeBoard = () => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Here you would typically send the data to your backend
-    console.log('Form submitted:', formData);
-    alert('Maintenance request submitted successfully!');
-    // Reset form
-    setFormData({
-      name: '',
-      unit: '',
-      phone: '',
-      email: '',
-      requestType: 'repair',
-      description: '',
-      preferredDate: '',
-      preferredTime: 'morning'
-    });
+    setIsSubmitting(true);
+    setSubmitError('');
+    setSubmitSuccess(false);
+
+    try {
+      // Get the current user ID from localStorage or use 'anonymous' if not available
+      const userId = localStorage.getItem('userId') || 'anonymous';
+      
+      // Add submission timestamp and user ID
+      const maintenanceRequest = {
+        ...formData,
+        user_id: userId,
+        created_at: new Date().toISOString(),
+        status: 'pending' // Initial status
+      };
+
+      // Insert maintenance request into Supabase
+      const { data, error } = await supabase
+        .from('maintenance_requests')
+        .insert([maintenanceRequest]);
+
+      if (error) {
+        throw error;
+      }
+
+      // Show success message
+      setSubmitSuccess(true);
+      console.log('Maintenance request saved:', data);
+      
+      // Reset form
+      setFormData({
+        name: '',
+        unit: '',
+        phone: '',
+        email: '',
+        requestType: 'repair',
+        description: '',
+        preferredDate: '',
+        preferredTime: 'morning'
+      });
+    } catch (error) {
+      console.error('Error saving maintenance request:', error);
+      setSubmitError(error.message || 'Failed to submit maintenance request');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const getPriorityColor = (priority) => {
@@ -147,6 +183,16 @@ const NoticeBoard = () => {
 
       <div className="maintenance-section">
         <h2>Maintenance Request</h2>
+        {submitSuccess && (
+          <div className="success-message">
+            Maintenance request submitted successfully!
+          </div>
+        )}
+        {submitError && (
+          <div className="error-message">
+            {submitError}
+          </div>
+        )}
         <form className="maintenance-form" onSubmit={handleSubmit}>
           <div className="form-row">
             <div className="form-group">
@@ -158,6 +204,7 @@ const NoticeBoard = () => {
                 value={formData.name}
                 onChange={handleChange}
                 required
+                disabled={isSubmitting}
               />
             </div>
             <div className="form-group">
@@ -169,6 +216,7 @@ const NoticeBoard = () => {
                 value={formData.unit}
                 onChange={handleChange}
                 required
+                disabled={isSubmitting}
               />
             </div>
           </div>
@@ -183,6 +231,7 @@ const NoticeBoard = () => {
                 value={formData.phone}
                 onChange={handleChange}
                 required
+                disabled={isSubmitting}
               />
             </div>
             <div className="form-group">
@@ -194,6 +243,7 @@ const NoticeBoard = () => {
                 value={formData.email}
                 onChange={handleChange}
                 required
+                disabled={isSubmitting}
               />
             </div>
           </div>
@@ -207,6 +257,7 @@ const NoticeBoard = () => {
                 value={formData.requestType}
                 onChange={handleChange}
                 required
+                disabled={isSubmitting}
               >
                 <option value="repair">Repair</option>
                 <option value="replacement">Replacement</option>
@@ -223,6 +274,7 @@ const NoticeBoard = () => {
                 value={formData.preferredDate}
                 onChange={handleChange}
                 required
+                disabled={isSubmitting}
               />
             </div>
           </div>
@@ -235,6 +287,7 @@ const NoticeBoard = () => {
               value={formData.preferredTime}
               onChange={handleChange}
               required
+              disabled={isSubmitting}
             >
               <option value="morning">Morning (9AM - 12PM)</option>
               <option value="afternoon">Afternoon (12PM - 5PM)</option>
@@ -251,11 +304,16 @@ const NoticeBoard = () => {
               onChange={handleChange}
               rows="4"
               required
+              disabled={isSubmitting}
             ></textarea>
           </div>
 
-          <button type="submit" className="btn btn-primary submit-btn">
-            Submit Request
+          <button 
+            type="submit" 
+            className="btn btn-primary submit-btn"
+            disabled={isSubmitting}
+          >
+            {isSubmitting ? 'Submitting...' : 'Submit Request'}
           </button>
         </form>
       </div>
