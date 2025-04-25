@@ -4,7 +4,7 @@
     { "src": "/(.*)", "dest": "/index.html" }
   ],
   "env": {
-    "SUPABASE_URL": "SUPABASE_URL",
-    "SUPABASE_ANON_KEY": "SUPABASE_ANON_KEY"
+    "REACT_APP_SUPABASE_URL": "SUPABASE_URL",
+    "REACT_APP_SUPABASE_ANON_KEY": "SUPABASE_ANON_KEY"
   }
 } 
