@@ -1,22 +1,14 @@
 {
   "functions": {
-    "api/php/index.php": {
-      "runtime": "vercel-php@0.6.0"
-    },
-    "api/php/supabase-auth.php": {
-      "runtime": "vercel-php@0.6.0"
-    },
-    "api/php/upload.php": {
+    "php/*.php": {
       "runtime": "vercel-php@0.6.0"
     }
   },
   "routes": [
     { "src": "/login", "dest": "/public/login.php" },
     { "src": "/document-upload", "dest": "/public/document-upload.php" },
-    { "src": "/api/auth", "dest": "/api/php/supabase-auth.php" },
-    { "src": "/api/upload", "dest": "/api/php/upload.php" },
-    { "src": "/api/(.*).php", "dest": "/api/php/$1.php" },
-    { "src": "/api/(.*)", "dest": "/api/$1" },
+    { "src": "/api/auth", "dest": "/php/auth.php" },
+    { "src": "/api/upload", "dest": "/php/upload.php" },
     { "handle": "filesystem" },
     { "src": "/.*", "dest": "/index.html" }
   ],
