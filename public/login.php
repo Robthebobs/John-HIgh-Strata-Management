@@ -155,7 +155,7 @@ if (isset($_SESSION['user_id'])) {
                 errorMessage.style.display = 'none';
                 
                 // Send login request
-                fetch('/api/supabase-auth.php', {
+                fetch('/api/auth', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'

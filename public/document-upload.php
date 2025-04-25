@@ -307,7 +307,7 @@
                 });
                 
                 // Open and send request
-                xhr.open('POST', '/api/upload.php', true);
+                xhr.open('POST', '/api/upload', true);
                 xhr.send(formData);
             }
             
