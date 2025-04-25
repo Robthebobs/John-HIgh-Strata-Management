@@ -19,7 +19,7 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 
 // Get Supabase credentials from environment variables
 $supabaseUrl = getenv('SUPABASE_URL');
-$supabaseKey = getenv('SUPABASE_KEY');
+$supabaseKey = getenv('SUPABASE_ANON_KEY');
 $bucketName = 'documents'; // Name of your Supabase storage bucket
 
 if (!$supabaseUrl || !$supabaseKey) {
