@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import logo from '../assets/logo.svg';
+import { supabase } from '../supabaseClient';
 
 const Login = () => {
-  const [userId, setUserId] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -14,18 +15,23 @@ const Login = () => {
     setIsLoading(true);
     setError('');
 
-    await new Promise(resolve => setTimeout(resolve, 500));
+    try {
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
 
-    const validUserId = process.env.REACT_APP_VALID_USER_ID;
-    const validPassword = process.env.REACT_APP_VALID_PASSWORD;
+      if (error) {
+        throw error;
+      }
 
-    if (userId === validUserId && password === validPassword) {
       localStorage.setItem('isAuthenticated', 'true');
       navigate('/notice-board');
-    } else {
-      setError('Invalid credentials');
+    } catch (error) {
+      setError(error.error_description || error.message || 'Invalid credentials');
+    } finally {
+      setIsLoading(false);
     }
-    setIsLoading(false);
   };
 
   const handleContactAdmin = async (e) => {
@@ -55,13 +61,13 @@ const Login = () => {
         
         <form onSubmit={handleLogin} className="login-form">
           <div className="form-group">
-            <label htmlFor="userId">User ID</label>
+            <label htmlFor="email">Email</label>
             <input
-              type="text"
-              id="userId"
-              value={userId}
-              onChange={(e) => setUserId(e.target.value)}
-              placeholder="Enter your user ID"
+              type="email"
+              id="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="Enter your email"
               disabled={isLoading}
               required
             />
@@ -95,6 +101,7 @@ const Login = () => {
           </button>
           
           <div className="login-footer">
+            <p>Don't have an account? <Link to="/signup" className="help-link">Sign up</Link></p>
             <p>Do not have your login details? <Link to="/404" className="help-link">Contact admin</Link></p>
           </div>
         </form>

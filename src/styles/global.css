@@ -477,6 +477,15 @@ body {
   font-size: 0.9rem;
 }
 
+.success-message {
+  color: #28a745;
+  text-align: center;
+  font-size: 0.9rem;
+  padding: 0.5rem;
+  background-color: rgba(40, 167, 69, 0.1);
+  border-radius: 4px;
+}
+
 @media (max-width: 768px) {
   .login-container {
     grid-template-columns: 1fr;
@@ -581,12 +590,6 @@ body {
   text-align: center;
   padding: 2rem;
   color: #666;
-}
-
-.error-message {
-  text-align: center;
-  color: #dc3545;
-  padding: 2rem;
 }
 
 .retry-btn {
