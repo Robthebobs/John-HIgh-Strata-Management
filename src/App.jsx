@@ -7,14 +7,17 @@ import Contact from './pages/Contact';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
 import NoticeBoard from './pages/NoticeBoard';
-import DocumentUpload from './pages/DocumentUpload';
+import CurrentMembers from './pages/CurrentMembers';
+import MaintenanceRequests from './pages/MaintenanceRequests';
 import DebugPage from './pages/DebugPage';
 import NotFound from './pages/NotFound';
+import { isAuthenticated } from './utils/cookies';
 import './styles/global.css';
 
 const ProtectedRoute = ({ children }) => {
-  const isAuthenticated = localStorage.getItem('isAuthenticated') === 'true';
-  return isAuthenticated ? children : <Navigate to="/login" />;
+  // Check authentication using cookies (with fallback to localStorage for compatibility)
+  const userIsAuthenticated = isAuthenticated() || localStorage.getItem('isAuthenticated') === 'true';
+  return userIsAuthenticated ? children : <Navigate to="/login" />;
 };
 
 function App() {
@@ -61,10 +64,18 @@ function App() {
             } 
           />
           <Route 
-            path="/documents" 
+            path="/members" 
             element={
               <ProtectedRoute>
-                <DocumentUpload />
+                <CurrentMembers />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/maintenance-requests" 
+            element={
+              <ProtectedRoute>
+                <MaintenanceRequests />
               </ProtectedRoute>
             } 
           />

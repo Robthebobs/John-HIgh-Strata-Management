@@ -2,12 +2,14 @@ import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import logo from '../assets/logo.svg';
 import { supabase } from '../supabaseClient';
+import { setAuthCookies } from '../utils/cookies';
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [rememberMe, setRememberMe] = useState(false);
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {
@@ -25,7 +27,15 @@ const Login = () => {
         throw error;
       }
 
-      localStorage.setItem('isAuthenticated', 'true');
+      // Store authentication status and user ID in both cookies and localStorage
+      if (data && data.user && data.user.id) {
+        // Set cookies with expiration based on rememberMe option
+        const expirationDays = rememberMe ? 30 : 1;
+        setAuthCookies(data.user.id, expirationDays);
+        console.log('User authenticated. ID stored:', data.user.id);
+        console.log('Session expiration:', rememberMe ? '30 days' : '1 day');
+      }
+
       navigate('/notice-board');
     } catch (error) {
       setError(error.error_description || error.message || 'Invalid credentials');
@@ -86,7 +96,16 @@ const Login = () => {
             />
           </div>
           
-          <div className="form-links">
+          <div className="form-options">
+            <div className="remember-me">
+              <input
+                type="checkbox"
+                id="rememberMe"
+                checked={rememberMe}
+                onChange={(e) => setRememberMe(e.target.checked)}
+              />
+              <label htmlFor="rememberMe">Remember me for 30 days</label>
+            </div>
             <Link to="/404" className="forgot-password">Forgot Password</Link>
           </div>
           

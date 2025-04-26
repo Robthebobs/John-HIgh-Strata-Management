@@ -30,7 +30,20 @@ export const safeSupabaseCall = async (operation) => {
   }
   
   try {
-    return await operation();
+    const result = await operation();
+    
+    if (result?.error) {
+      // Log detailed error information for debugging
+      console.error('Supabase operation returned an error:', {
+        message: result.error.message,
+        details: result.error.details,
+        hint: result.error.hint,
+        code: result.error.code,
+        fullError: JSON.stringify(result.error, null, 2)
+      });
+    }
+    
+    return result;
   } catch (error) {
     console.error('Supabase operation failed:', error);
     return { data: null, error };

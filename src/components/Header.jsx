@@ -1,12 +1,14 @@
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 import logo from '../assets/logo.svg';
+import { isAuthenticated } from '../utils/cookies';
 
 const Header = () => {
   const navigate = useNavigate();
-  const isAuthenticated = localStorage.getItem('isAuthenticated') === 'true';
+  // Check authentication using cookies with fallback to localStorage
+  const userIsAuthenticated = isAuthenticated() || localStorage.getItem('isAuthenticated') === 'true';
 
   const handleProtectedRoute = (e) => {
-    if (!isAuthenticated) {
+    if (!userIsAuthenticated) {
       e.preventDefault();
       navigate('/login');
     }
@@ -35,11 +37,18 @@ const Header = () => {
           Requests/Announcements
         </NavLink>
         <NavLink 
-          to="/documents" 
+          to="/maintenance-requests" 
           className={({ isActive }) => isActive ? "nav-link active" : "nav-link"}
           onClick={handleProtectedRoute}
         >
-          Documents
+          My Requests
+        </NavLink>
+        <NavLink 
+          to="/members" 
+          className={({ isActive }) => isActive ? "nav-link active" : "nav-link"}
+          onClick={handleProtectedRoute}
+        >
+          Current Members
         </NavLink>
       </nav>
       

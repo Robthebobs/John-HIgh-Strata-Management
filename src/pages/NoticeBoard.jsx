@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '../supabaseClient';
+import { clearAuthCookies } from '../utils/cookies';
 
 // Mock data for both development and production
 const mockAnnouncements = [
@@ -63,7 +64,7 @@ const NoticeBoard = () => {
   };
 
   const handleLogout = () => {
-    localStorage.removeItem('isAuthenticated');
+    clearAuthCookies();
     navigate('/login');
   };
 
@@ -91,8 +92,12 @@ const NoticeBoard = () => {
         userId = '00000000-0000-0000-0000-000000000000';
       }
       
-      // Add submission timestamp and user ID
+      // Generate a unique ID for this request to avoid primary key conflicts
+      const uniqueId = crypto.randomUUID ? crypto.randomUUID() : `req-${Date.now()}-${Math.random().toString(36).substring(2, 11)}`;
+      
+      // Add submission timestamp, user ID, and unique ID
       const maintenanceRequest = {
+        id: uniqueId,
         ...formData,
         user_id: userId,
         created_at: new Date().toISOString(),
@@ -189,6 +194,16 @@ const NoticeBoard = () => {
 
       <div className="maintenance-section">
         <h2>Maintenance Request</h2>
+        <div className="section-header">
+          <p>Submit a new maintenance request below or view your previous requests.</p>
+          <button 
+            onClick={() => navigate('/maintenance-requests')} 
+            className="btn btn-secondary view-requests-btn"
+          >
+            View My Requests
+          </button>
+        </div>
+        
         {submitSuccess && (
           <div className="success-message">
             Maintenance request submitted successfully!
