@@ -3,37 +3,13 @@ import { useNavigate } from 'react-router-dom';
 import { supabase } from '../supabaseClient';
 import { clearAuthCookies } from '../utils/cookies';
 
-// Mock data for both development and production
-const mockAnnouncements = [
-  {
-    id: 1,
-    title: "System Maintenance",
-    content: "Scheduled maintenance this weekend from 2 AM to 4 AM AEST",
-    date: "2024-04-20",
-    priority: "high"
-  },
-  {
-    id: 2,
-    title: "New Feature Release",
-    content: "Check out our new dashboard features!",
-    date: "2024-04-19",
-    priority: "medium"
-  },
-  {
-    id: 3,
-    title: "Office Update",
-    content: "Sydney office will be having a team building day next Friday",
-    date: "2024-04-18",
-    priority: "low"
-  }
-];
-
 const NoticeBoard = () => {
   const [announcements, setAnnouncements] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState('');
   const [submitSuccess, setSubmitSuccess] = useState(false);
+  const [newAnnouncementAlert, setNewAnnouncementAlert] = useState(null);
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     name: '',
@@ -48,16 +24,47 @@ const NoticeBoard = () => {
 
   useEffect(() => {
     loadAnnouncements();
+    
+    // Subscribe to real-time updates for announcements
+    const subscription = supabase
+      .channel('announcements-changes')
+      .on('postgres_changes', 
+        { 
+          event: '*', 
+          schema: 'public', 
+          table: 'announcements' 
+        }, 
+        (payload) => {
+          if (payload.eventType === 'INSERT') {
+            // Show alert for new announcement
+            setNewAnnouncementAlert(payload.new.title);
+            setTimeout(() => setNewAnnouncementAlert(null), 5000);
+          }
+          // Reload announcements to get the latest data
+          loadAnnouncements();
+        })
+      .subscribe();
+
+    return () => {
+      subscription.unsubscribe();
+    };
   }, []);
 
   const loadAnnouncements = async () => {
     try {
       setIsLoading(true);
-      // Simulate API delay
-      await new Promise(resolve => setTimeout(resolve, 500));
-      setAnnouncements(mockAnnouncements);
+      const { data, error } = await supabase
+        .from('announcements')
+        .select('*')
+        .order('created_at', { ascending: false });
+
+      if (error) {
+        throw error;
+      }
+
+      setAnnouncements(data || []);
     } catch (err) {
-      console.error('Error:', err);
+      console.error('Error loading announcements:', err);
     } finally {
       setIsLoading(false);
     }
@@ -88,7 +95,6 @@ const NoticeBoard = () => {
       
       // If no user ID or the value isn't a UUID, use a default UUID for anonymous users
       if (!userId || !/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(userId)) {
-        // This is a fixed UUID specifically for anonymous users
         userId = '00000000-0000-0000-0000-000000000000';
       }
       
@@ -166,6 +172,13 @@ const NoticeBoard = () => {
         </button>
       </div>
 
+      {newAnnouncementAlert && (
+        <div className="new-announcement-alert">
+          <span className="pulse-dot"></span> 
+          New announcement: <strong>{newAnnouncementAlert}</strong>
+        </div>
+      )}
+
       <div className="announcements-section">
         <h2>Announcements</h2>
         <div className="announcements">
@@ -180,7 +193,7 @@ const NoticeBoard = () => {
               >
                 <div className="announcement-header">
                   <h2>{announcement.title}</h2>
-                  <span className="date">{announcement.date}</span>
+                  <span className="date">{new Date(announcement.created_at).toLocaleDateString()}</span>
                 </div>
                 <p className="content">{announcement.content}</p>
                 <div className="priority-tag" style={{ color: getPriorityColor(announcement.priority) }}>
