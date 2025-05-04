@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useNavigate, Link, useSearchParams } from 'react-router-dom';
 import logo from '../assets/logo.svg';
 import { supabase } from '../supabaseClient';
 
@@ -12,6 +12,21 @@ const Signup = () => {
   const [success, setSuccess] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+
+  useEffect(() => {
+    // Check if we're returning from email confirmation
+    const accessToken = searchParams.get('access_token');
+    if (accessToken) {
+      // Store the session
+      supabase.auth.setSession({
+        access_token: accessToken,
+        refresh_token: searchParams.get('refresh_token')
+      }).then(() => {
+        navigate('/notice-board');
+      });
+    }
+  }, [searchParams, navigate]);
 
   const handleSignup = async (e) => {
     e.preventDefault();
@@ -42,7 +57,7 @@ const Signup = () => {
           data: {
             full_name: fullName,
           },
-          emailRedirectTo: `${window.location.origin}/email-confirmation`
+          emailRedirectTo: `${window.location.origin}/signup`
         }
       });
 
