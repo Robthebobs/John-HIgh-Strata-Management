@@ -41,7 +41,8 @@ const Signup = () => {
         options: {
           data: {
             full_name: fullName,
-          }
+          },
+          emailRedirectTo: `${window.location.origin}/email-confirmation`
         }
       });
 
@@ -49,26 +50,28 @@ const Signup = () => {
         throw error;
       }
 
-      // Store additional user details in a profiles table if needed
-      const { error: profileError } = await supabase
-        .from('profiles')
-        .insert([
-          { 
-            id: data.user.id,
-            full_name: fullName,
-            email: email,
-            created_at: new Date(),
-          }
-        ]);
+      if (data?.user) {
+        // Store additional user details in a profiles table
+        const { error: profileError } = await supabase
+          .from('profiles')
+          .insert([
+            { 
+              id: data.user.id,
+              full_name: fullName,
+              email: email,
+              created_at: new Date(),
+            }
+          ]);
 
-      if (profileError) {
-        throw profileError;
+        if (profileError) {
+          throw profileError;
+        }
+
+        setSuccess('Account created successfully! Please check your email to confirm your account.');
+        setTimeout(() => {
+          navigate('/login');
+        }, 3000);
       }
-
-      setSuccess('Account created successfully! Please check your email to confirm your account.');
-      setTimeout(() => {
-        navigate('/login');
-      }, 3000);
     } catch (error) {
       setError(error.error_description || error.message);
     } finally {

@@ -11,6 +11,7 @@ import CurrentMembers from './pages/CurrentMembers';
 import MaintenanceRequests from './pages/MaintenanceRequests';
 import DebugPage from './pages/DebugPage';
 import NotFound from './pages/NotFound';
+import EmailConfirmation from './pages/EmailConfirmation';
 import { isAuthenticated } from './utils/cookies';
 import './styles/global.css';
 
@@ -55,6 +56,7 @@ function App() {
           <Route path="/contact" element={<Contact />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
+          <Route path="/email-confirmation" element={<EmailConfirmation />} />
           <Route 
             path="/notice-board" 
             element={
